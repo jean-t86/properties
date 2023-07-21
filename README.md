@@ -15,7 +15,7 @@ Create a new Android project that:
    endpoint `https://f213b61d-6411-4018-a178-53863ed9f8ec.mock.pstmn.io/properties`
 2. Displays the content in a list by following the design:
 
-   <img src="./resources/images/property-list-item.png" height="300">
+   <img src="./resources/images/property-list-item.png" height="450">
    
 3. Displays the content in a detail screen: The detail screen can simply contain a Textview. When a
    list item is selected simply display the ID of the selected property.
