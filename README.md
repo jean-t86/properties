@@ -14,7 +14,9 @@ Create a new Android project that:
 1. Parse json from the
    endpoint `https://f213b61d-6411-4018-a178-53863ed9f8ec.mock.pstmn.io/properties`
 2. Displays the content in a list by following the design:
-   <img src="./resources/images/property-list-item.png" height="600">
+
+   <img src="./resources/images/property-list-item.png" height="300">
+   
 3. Displays the content in a detail screen: The detail screen can simply contain a Textview. When a
    list item is selected simply display the ID of the selected property.
 4. Applying appropriate styling and design pleasantries, such as transitional animations or material
