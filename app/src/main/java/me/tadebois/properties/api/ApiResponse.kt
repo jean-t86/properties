@@ -1,4 +1,4 @@
-package me.tadebois.properties.propertyapi
+package me.tadebois.properties.api
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

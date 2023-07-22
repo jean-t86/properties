@@ -1,14 +1,14 @@
-package me.tadebois.properties
+package me.tadebois.properties.ui
 
-import me.tadebois.properties.propertyapi.Agent
-import me.tadebois.properties.propertyapi.Avatar
-import me.tadebois.properties.propertyapi.AvatarImage
-import me.tadebois.properties.propertyapi.ImageAttachment
-import me.tadebois.properties.propertyapi.ImageSize
-import me.tadebois.properties.propertyapi.Location
-import me.tadebois.properties.propertyapi.Owner
-import me.tadebois.properties.propertyapi.Property
-import me.tadebois.properties.propertyapi.PropertyImage
+import me.tadebois.properties.api.Agent
+import me.tadebois.properties.api.Avatar
+import me.tadebois.properties.api.AvatarImage
+import me.tadebois.properties.api.ImageAttachment
+import me.tadebois.properties.api.ImageSize
+import me.tadebois.properties.api.Location
+import me.tadebois.properties.api.Owner
+import me.tadebois.properties.api.Property
+import me.tadebois.properties.api.PropertyImage
 
 object Helpers {
     fun getProperty(): Property =
