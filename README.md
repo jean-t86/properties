@@ -1,3 +1,26 @@
+## Table of Content
+
+* [Environment setup](#environment-setup)
+* [Sentia Android Code Challenge](#sentia-android-code-challenge)
+
+## Environment setup
+
+If you only plan on running the app in it's **debug** build type configuration, skip this section.
+
+If you want to run the application in it's **release** configuration, you will need to:
+
+1. Get the 1Password **Service Token** from the [code owner](mailto:jpm.tadebois@gmail.com),
+2. In the `setup-dev-environment.sh` script, replace `TOKEN_PLACEHOLDER` with the provided **Service
+   Token**,
+3. Run `chmod +x setup-dev-environment.sh` in your terminal in the project's root to make the script
+   executable,
+4. Save and run `./setup-dev-environment.sh` in your terminal in order to fetch the app's signing
+   secrets from 1Password.
+
+> This will generate the `config.properties` file with the required app's secrets.
+
+You can now run the application in the Release build type.
+
 # Sentia Android Code Challenge
 
 ## Overview
@@ -16,7 +39,7 @@ Create a new Android project that:
 2. Displays the content in a list by following the design:
 
    <img src="./resources/images/property-list-item.png" height="450">
-   
+
 3. Displays the content in a detail screen: The detail screen can simply contain a Textview. When a
    list item is selected simply display the ID of the selected property.
 4. Applying appropriate styling and design pleasantries, such as transitional animations or material
