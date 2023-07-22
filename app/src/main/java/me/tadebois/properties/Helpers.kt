@@ -22,7 +22,7 @@ object Helpers {
             dateFirstListed = "2019-01-16T00:00:00+00:00",
             dateUpdated = "2020-09-02T00:00:00+00:00",
             description = "Designed by MHN Design Union with interiors by Burley Katon Halliday, 'The Beach House' captures the essence of Bondi's laidback lifestyle, whilst incorporating high-end finishes, house-like proportions and cutting-edge design throughout.",
-            displayPrice = "\$2,430,000",
+            displayPrice = "$2,430,000",
             currency = "AUD",
             Location(
                 address = "10/178 Campbell Parade, Bondi Beach NSW 2026",
@@ -50,6 +50,15 @@ object Helpers {
                         thumb = ImageSize("https://cdn.pixabay.com/photo/2016/11/18/17/46/architecture-1836070__340.jpg"),
                         medium = ImageSize("https://cdn.pixabay.com/photo/2016/11/18/17/46/architecture-1836070__340.jpg"),
                         large = ImageSize("https://cdn.pixabay.com/photo/2016/11/18/17/46/architecture-1836070__340.jpg")
+                    )
+                ),
+                PropertyImage(
+                    id = 13,
+                    attachment = ImageAttachment(
+                        url = "https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187__340.jpg",
+                        thumb = ImageSize("https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187__340.jpg"),
+                        medium = ImageSize("https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187__340.jpg"),
+                        large = ImageSize("https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187__340.jpg")
                     )
                 )
             ),
