@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import me.tadebois.properties.Helpers.getProperty
 import me.tadebois.properties.propertyapi.ApiResponse
 import me.tadebois.properties.propertyapi.Property
 import me.tadebois.properties.propertyapi.PropertyApi
+import me.tadebois.properties.propertyapi.PropertyApiService
 import me.tadebois.properties.ui.theme.PropertiesTheme
 
 @Composable
@@ -30,7 +32,14 @@ fun PropertiesScreen() {
         LaunchedEffect(Unit) {
             // Fetch properties when the composable is first launched
             scope.launch {
-                propertyApiResponse = PropertyApi().getProperties()
+                // TODO: Refactor to use ViewModel
+                propertyApiResponse = PropertyApi(
+                    object : PropertyApiService {
+                        override suspend fun getProperties(): ApiResponse {
+                            return ApiResponse(listOf(getProperty()))
+                        }
+                    }
+                ).getProperties()
             }
         }
 
@@ -62,7 +71,7 @@ fun PropertyItem(property: Property, modifier: Modifier = Modifier) {
 fun PropertyItemPreview() {
     PropertiesTheme {
         PropertyItem(
-            Helpers.getProperty()
+            getProperty()
         )
     }
 }
