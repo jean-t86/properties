@@ -1,4 +1,4 @@
-package me.tadebois.properties.propertyapi
+package me.tadebois.properties.api
 
 import retrofit2.http.GET
 

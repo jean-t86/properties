@@ -1,4 +1,4 @@
-package me.tadebois.properties
+package me.tadebois.properties.api
 
 object ApiResponseTestData {
     const val SAMPLE_PROPERTY_API_RESPONSE = """

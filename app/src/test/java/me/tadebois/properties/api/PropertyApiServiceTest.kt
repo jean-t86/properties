@@ -1,11 +1,10 @@
-package me.tadebois.properties
+package me.tadebois.properties.api
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.runBlocking
-import me.tadebois.properties.ApiResponseTestData.SAMPLE_PROPERTY_API_RESPONSE
-import me.tadebois.properties.propertyapi.PropertyApi
-import me.tadebois.properties.propertyapi.PropertyApiService
+import kotlinx.coroutines.test.runTest
+import me.tadebois.properties.api.ApiResponseTestData.SAMPLE_PROPERTY_API_RESPONSE
+import me.tadebois.properties.ui.Helpers
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -41,14 +40,17 @@ class PropertyApiServiceTest {
     }
 
     @Test
-    fun getProperties_returnsListOfProperties() = runBlocking {
+    fun getProperties_returnsListOfProperties() = runTest {
         mockWebServer.enqueue(MockResponse().setBody(SAMPLE_PROPERTY_API_RESPONSE))
 
-        val properties = propertyApi.getProperties().data
+        var properties: List<Property>? = null
+        propertyApi.getProperties().collect {
+            properties = it
+        }
 
         assertNotNull(properties)
-        assertEquals(3, properties.count())
-        assertEquals(Helpers.getProperty(), properties[0])
+        assertEquals(3, properties?.count())
+        assertEquals(Helpers.getProperty(), properties?.getOrNull(0))
 
         val recordedRequest = mockWebServer.takeRequest()
         assertEquals("/properties", recordedRequest.path)

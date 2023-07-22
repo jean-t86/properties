@@ -1,14 +1,12 @@
-package me.tadebois.properties
+package me.tadebois.properties.api
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.runBlocking
-import me.tadebois.properties.ApiResponseTestData.SAMPLE_PROPERTY_API_RESPONSE
-import me.tadebois.properties.propertyapi.ApiResponse
-import me.tadebois.properties.propertyapi.PropertyApi
-import me.tadebois.properties.propertyapi.PropertyApiService
-import org.junit.Assert
+import kotlinx.coroutines.test.runTest
+import me.tadebois.properties.api.ApiResponseTestData.SAMPLE_PROPERTY_API_RESPONSE
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,33 +30,40 @@ class PropertyApiTest {
     }
 
     @Test
-    fun getProperties_returnsListOfProperties() = runBlocking {
+    fun getProperties_returnsListOfProperties() = runTest {
         val responseType = object : TypeToken<ApiResponse>() {}.type
-        val expected: ApiResponse = Gson().fromJson(
+        val apiResponse: ApiResponse = Gson().fromJson(
             SAMPLE_PROPERTY_API_RESPONSE,
             responseType
         )
-        Mockito.`when`(apiService.getProperties()).thenReturn(expected)
+        val expected = apiResponse.data
+        Mockito.`when`(apiService.getProperties()).thenReturn(apiResponse)
 
-        val actual = propertyApi.getProperties()
+        var actual: List<Property>? = null
+        propertyApi.getProperties().collect {
+            actual = it
+        }
 
+        assertNotNull(actual)
         Mockito.verify(apiService).getProperties()
         assertEquals(expected, actual)
     }
 
     @Test
-    fun getProperties_canThrowAnException() = runBlocking {
+    fun getProperties_canThrowAnException() = runTest {
         val mockedException = RuntimeException("API error")
         Mockito.`when`(apiService.getProperties()).thenThrow(mockedException)
 
         var exceptionThrown = false
         try {
-            propertyApi.getProperties()
+            propertyApi.getProperties().collect {
+                // Wait for an emit
+            }
         } catch (e: Exception) {
             exceptionThrown = true
         }
 
         Mockito.verify(apiService).getProperties()
-        Assert.assertTrue(exceptionThrown)
+        assertTrue(exceptionThrown)
     }
 }

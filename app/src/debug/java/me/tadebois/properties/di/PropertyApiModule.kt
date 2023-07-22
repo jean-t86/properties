@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.tadebois.properties.propertyapi.PropertyApi
-import me.tadebois.properties.propertyapi.PropertyApiService
+import me.tadebois.properties.api.PropertyApi
+import me.tadebois.properties.api.PropertyApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
