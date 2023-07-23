@@ -22,17 +22,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SplashScreen(propertyViewModel) {
-                setContent {
-                    PropertiesTheme {
-                        Surface(
-                            modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colorScheme.background
-                        ) {
-                            PropertiesScreen(propertyViewModel)
+            PropertiesTheme {
+                SplashScreen(propertyViewModel) {
+                    setContent {
+                        PropertiesTheme {
+                            Surface(
+                                modifier = Modifier.fillMaxSize(),
+                                color = MaterialTheme.colorScheme.background
+                            ) {
+                                PropertiesScreen(propertyViewModel)
+                            }
                         }
-                    }
 
+                    }
                 }
             }
         }
