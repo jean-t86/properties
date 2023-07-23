@@ -95,6 +95,7 @@ dependencies {
     // Coil and Accompanist for image loading in Jetpack Compose
     implementation 'com.google.accompanist:accompanist-pager:0.18.0'
     implementation 'com.google.accompanist:accompanist-coil:0.15.0'
+    implementation 'com.google.accompanist:accompanist-placeholder-material3:0.31.5-beta'
 
     // Local test dependencies
     testImplementation 'junit:junit:4.13.2'
