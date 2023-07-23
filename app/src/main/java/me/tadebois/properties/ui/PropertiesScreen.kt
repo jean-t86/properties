@@ -1,5 +1,7 @@
 package me.tadebois.properties.ui
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,8 +23,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,11 +36,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import me.tadebois.properties.R
 import me.tadebois.properties.api.Property
 import me.tadebois.properties.api.PropertyImage
@@ -122,45 +124,60 @@ fun ImageCarousel(
     propertyImages: List<PropertyImage>,
     modifier: Modifier = Modifier
 ) {
-    val imageUrls = propertyImages.map { it.attachment.medium.url }
+    val imageUrls = propertyImages.map { it.attachment.thumb.url }
     val context = LocalContext.current
 
-    // Load and cache all the images only once, after the composable is committed
-    val imageBitmaps by rememberUpdatedState(newValue = runBlocking {
+    // Cache the images using remember with a custom key
+    val imageBitmaps = remember(imageUrls) {
         imageUrls.map { imageUrl ->
-            val requestOptions = RequestOptions()
-                .diskCacheStrategy(DiskCacheStrategy.DATA) // Cache the original image size
-
-            withContext(Dispatchers.IO) {
+            mutableStateOf<ImageBitmap?>(null).apply {
+                // Load the image asynchronously using Glide's target
                 Glide.with(context)
                     .asBitmap()
                     .load(imageUrl)
-                    .apply(requestOptions)
-                    .submit() // Load the image synchronously (non-blocking)
-                    .get() // Get the result (blocking)
-                    .asImageBitmap() // Convert to ImageBitmap
+                    .transition(BitmapTransitionOptions.withCrossFade()) // Crossfade transition
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(
+                            resource: Bitmap,
+                            transition: Transition<in Bitmap>?
+                        ) {
+                            value = resource.asImageBitmap()
+                        }
+
+                        override fun onLoadCleared(placeholder: Drawable?) {
+                            // Not used
+                        }
+                    })
             }
         }
-    })
+    }
 
     LazyRow(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(16 / 9f)
     ) {
-        itemsIndexed(imageBitmaps) { _, imageBitmap ->
+        itemsIndexed(imageBitmaps) { index, imageBitmapState ->
+            val imageBitmap by imageBitmapState
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16 / 9f)
             ) {
-                Image(
-                    bitmap = imageBitmap,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
+                imageBitmap?.let {
+                    Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
             }
         }
     }
 }
+
+
+
+
