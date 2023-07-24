@@ -217,7 +217,7 @@ private fun PropertyAgent(
                     shape = CircleShape,
                     highlight = PlaceholderHighlight.shimmer(
                         highlightColor = Color.White,
-                    ),
+                    )
                 )
         ) { }
         Image(
