@@ -27,14 +27,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PropertiesTheme {
-                MainApp(propertyViewModel)
+                App(propertyViewModel)
             }
         }
     }
 }
 
 @Composable
-fun MainApp(propertyViewModel: PropertyViewModel = viewModel()) {
+fun App(propertyViewModel: PropertyViewModel = viewModel()) {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = "splashScreen") {
