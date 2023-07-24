@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Properties</string>
+    <string name="app_name">Real Estate</string>
+    <string name="properties_screen">Properties</string>
+    <string name="property_details_screen">Property Details</string>
+    <string name="agent_photo">Agent Photo</string>
+    <string name="car_spaces">Car spaces</string>
+    <string name="bathrooms">Bathrooms</string>
+    <string name="bedrooms">Bedrooms</string>
+    <string name="connection_error">Failed to load properties. Please check your internet connection and try again.</string>
+    <string name="retry">Retry</string>
 </resources>

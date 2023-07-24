@@ -3,44 +3,61 @@ package me.tadebois.properties
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
+import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
+import me.tadebois.properties.ui.PropertiesScreen
+import me.tadebois.properties.ui.PropertyDetailsScreen
+import me.tadebois.properties.ui.PropertyViewModel
+import me.tadebois.properties.ui.SplashScreen
 import me.tadebois.properties.ui.theme.PropertiesTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val propertyViewModel: PropertyViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             PropertiesTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
-                }
+                App(propertyViewModel)
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun App(propertyViewModel: PropertyViewModel = viewModel()) {
+    val navController = rememberNavController()
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PropertiesTheme {
-        Greeting("Android")
+    NavHost(navController, startDestination = "splashScreen") {
+        composable(route = "splashScreen") {
+            SplashScreen(propertyViewModel) {
+                navController.navigate("propertiesScreen") {
+                    popUpTo("splashScreen") { inclusive = true }
+                }
+            }
+        }
+        composable(route = "propertiesScreen") {
+            PropertiesScreen(propertyViewModel) { property ->
+                navController.navigate("propertyDetailsScreen/${property.id}")
+            }
+        }
+        composable(
+            route = "propertyDetailsScreen/{propertyId}",
+            arguments = listOf(
+                navArgument("propertyId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId")
+            PropertyDetailsScreen(propertyId)
+        }
     }
 }
