@@ -129,8 +129,7 @@ private fun loadAndCachePropertyImages(
                     .data(imageUrl)
                     .target { drawable ->
                         value = (drawable as BitmapDrawable).bitmap.asImageBitmap()
-                    }
-                    .build()
+                    }.build()
 
                 ImageLoader(context).enqueue(request)
             }
