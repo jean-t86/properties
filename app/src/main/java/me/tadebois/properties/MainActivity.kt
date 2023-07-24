@@ -4,17 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import me.tadebois.properties.api.Property
 import me.tadebois.properties.ui.PropertiesScreen
+import me.tadebois.properties.ui.PropertyDetailsScreen
 import me.tadebois.properties.ui.PropertyViewModel
 import me.tadebois.properties.ui.SplashScreen
 import me.tadebois.properties.ui.theme.PropertiesTheme
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -25,24 +27,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PropertiesTheme {
-                SplashScreen(propertyViewModel) {
-                    setContent {
-                        PropertiesTheme {
-                            Surface(
-                                modifier = Modifier.fillMaxSize(),
-                                color = MaterialTheme.colorScheme.background
-                            ) {
-                                PropertiesScreen(propertyViewModel, ::onPropertyTapped)
-                            }
-                        }
-
-                    }
-                }
+                App(propertyViewModel)
             }
         }
     }
+}
 
-    private fun onPropertyTapped(property: Property) {
-        Timber.d("")
+@Composable
+fun App(propertyViewModel: PropertyViewModel = viewModel()) {
+    val navController = rememberNavController()
+
+    NavHost(navController, startDestination = "splashScreen") {
+        composable(route = "splashScreen") {
+            SplashScreen(propertyViewModel) {
+                navController.navigate("propertiesScreen") {
+                    popUpTo("splashScreen") { inclusive = true }
+                }
+            }
+        }
+        composable(route = "propertiesScreen") {
+            PropertiesScreen(propertyViewModel) { property ->
+                navController.navigate("propertyDetailsScreen/${property.id}")
+            }
+        }
+        composable(
+            route = "propertyDetailsScreen/{propertyId}",
+            arguments = listOf(
+                navArgument("propertyId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val propertyId = backStackEntry.arguments?.getString("propertyId")
+            PropertyDetailsScreen(propertyId)
+        }
     }
 }
