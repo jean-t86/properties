@@ -1,5 +1,6 @@
 package me.tadebois.properties.ui
 
+import android.app.Application
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -29,12 +30,15 @@ class PropertyViewModelTest {
     @Mock
     private lateinit var propertyRepository: PropertyRepository
 
+    @Mock
+    private lateinit var application: Application
+
     private lateinit var propertyViewModel: PropertyViewModel
 
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
-        propertyViewModel = PropertyViewModel(propertyRepository)
+        propertyViewModel = PropertyViewModel(application, propertyRepository)
     }
 
     @Test

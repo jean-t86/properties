@@ -6,4 +6,6 @@
     <string name="car_spaces">Car spaces</string>
     <string name="bathrooms">Bathrooms</string>
     <string name="bedrooms">Bedrooms</string>
+    <string name="connection_error">Failed to load properties. Please check your internet connection and try again.</string>
+    <string name="retry">Retry</string>
 </resources>
