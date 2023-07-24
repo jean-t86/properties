@@ -12,6 +12,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,10 +35,14 @@ fun SplashScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        LaunchedEffect(key1 = true, block = {
-            propertyViewModel.loadProperties()
+        val propertiesLoaded = propertyViewModel.propertiesLoaded
+
+        LaunchedEffect(true) {
+            if (!propertiesLoaded.value) {
+                propertyViewModel.loadProperties()
+            }
             onSplashScreenFinished()
-        })
+        }
 
         Image(
             painter = painterResource(R.drawable.sentia_logo),

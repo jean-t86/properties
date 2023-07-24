@@ -1,5 +1,7 @@
 package me.tadebois.properties.ui
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,13 +15,17 @@ import javax.inject.Inject
 class PropertyViewModel @Inject constructor(private val propertyRepository: PropertyRepository) :
     ViewModel() {
 
-    private val _properties: MutableStateFlow<List<Property>> = MutableStateFlow(emptyList())
     val properties: StateFlow<List<Property>> get() = _properties
+    private val _properties: MutableStateFlow<List<Property>> = MutableStateFlow(emptyList())
+
+    val propertiesLoaded: State<Boolean> get() = _propertiesLoaded
+    private val _propertiesLoaded = mutableStateOf(false)
 
     suspend fun loadProperties() {
         try {
             propertyRepository.getProperties().collect { properties ->
                 _properties.value = properties
+                _propertiesLoaded.value = true
             }
         } catch (e: Exception) {
             // TODO: Handle endpoint errors gracefully
