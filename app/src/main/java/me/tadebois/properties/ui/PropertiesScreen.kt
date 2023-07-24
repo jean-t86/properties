@@ -2,7 +2,9 @@ package me.tadebois.properties.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -29,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import me.tadebois.properties.R
 import me.tadebois.properties.api.Property
 import me.tadebois.properties.ui.Helpers.formatAgentName
@@ -90,12 +96,11 @@ fun PropertyList(
     onPropertyTapped: (property: Property) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .verticalScroll(rememberScrollState())
-            .padding(bottom = 16.dp)
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(8.dp)
     ) {
-        properties.forEach { property ->
+        itemsIndexed(properties) { _, property ->
             PropertyItem(property, { onPropertyTapped(property) })
         }
     }
@@ -119,7 +124,6 @@ fun PropertyItem(
 ) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
-        modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
         onClick = { onPropertyTapped(property) }
     ) {
         Column {
@@ -189,8 +193,7 @@ private fun PropertyAddress(
 ) {
     Text(
         text = formatPropertyType(property),
-        style = MaterialTheme.typography.titleLarge,
-        modifier = modifier.padding(bottom = 16.dp)
+        style = MaterialTheme.typography.titleLarge
     )
     Text(text = getStreetAddress(property) ?: "", modifier = modifier.alpha(0.3f))
     Text(text = getSuburb(property) ?: "", modifier = modifier.alpha(0.3f))
@@ -203,14 +206,29 @@ private fun PropertyAgent(
     modifier: Modifier = Modifier
 ) {
     val painter = rememberImagePainter(data = property.agent.avatar.small.url)
-    Image(
-        painter = painter,
-        contentDescription = stringResource(R.string.agent_photo),
-        contentScale = ContentScale.Crop,
-        modifier = modifier
-            .size(80.dp)
-            .clip(CircleShape)
-    )
+    Box {
+        Surface(
+            modifier = modifier
+                .size(80.dp)
+                .placeholder(
+                    visible = true,
+                    color = Color.Gray,
+                    // optional, defaults to RectangleShape
+                    shape = CircleShape,
+                    highlight = PlaceholderHighlight.shimmer(
+                        highlightColor = Color.White,
+                    )
+                )
+        ) { }
+        Image(
+            painter = painter,
+            contentDescription = stringResource(R.string.agent_photo),
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(80.dp)
+                .clip(CircleShape)
+        )
+    }
     Spacer(modifier = modifier.width(8.dp))
     Text(
         text = formatAgentName(property),
