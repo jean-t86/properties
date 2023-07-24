@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Properties</string>
+    <string name="agent_photo">Agent Photo</string>
+    <string name="car_spaces">Car spaces</string>
+    <string name="bathrooms">Bathrooms</string>
+    <string name="bedrooms">Bedrooms</string>
 </resources>
