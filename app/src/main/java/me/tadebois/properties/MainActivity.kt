@@ -9,10 +9,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import dagger.hilt.android.AndroidEntryPoint
+import me.tadebois.properties.api.Property
 import me.tadebois.properties.ui.PropertiesScreen
 import me.tadebois.properties.ui.PropertyViewModel
 import me.tadebois.properties.ui.SplashScreen
 import me.tadebois.properties.ui.theme.PropertiesTheme
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxSize(),
                                 color = MaterialTheme.colorScheme.background
                             ) {
-                                PropertiesScreen(propertyViewModel)
+                                PropertiesScreen(propertyViewModel, ::onPropertyTapped)
                             }
                         }
 
@@ -38,5 +40,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun onPropertyTapped(property: Property) {
+        Timber.d("")
     }
 }
