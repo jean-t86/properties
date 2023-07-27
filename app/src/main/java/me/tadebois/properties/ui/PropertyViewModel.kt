@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -38,6 +39,12 @@ class PropertyViewModel @Inject constructor(
             }
         } catch (e: Exception) {
             Timber.e(e.message)
+            /*
+            This delay is in service of better UI/UX. It shows the user that the application
+            tried to fetch the data but failed. A delay will allow the user to see the
+            loading spinner on the splash screen each time Retry is tapped.
+             */
+            delay(500)
             _error.value = application.getString(R.string.connection_error)
         }
     }
