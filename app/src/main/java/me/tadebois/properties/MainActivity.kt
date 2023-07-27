@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -35,18 +36,19 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(propertyViewModel: PropertyViewModel = viewModel()) {
+    val modifier = Modifier
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = "splashScreen") {
         composable(route = "splashScreen") {
-            SplashScreen(propertyViewModel) {
+            SplashScreen(modifier = modifier, propertyViewModel) {
                 navController.navigate("propertiesScreen") {
                     popUpTo("splashScreen") { inclusive = true }
                 }
             }
         }
         composable(route = "propertiesScreen") {
-            PropertiesScreen(propertyViewModel) { property ->
+            PropertiesScreen(modifier = modifier, propertyViewModel) { property ->
                 navController.navigate("propertyDetailsScreen/${property.id}")
             }
         }
@@ -57,7 +59,7 @@ fun App(propertyViewModel: PropertyViewModel = viewModel()) {
             )
         ) { backStackEntry ->
             val propertyId = backStackEntry.arguments?.getString("propertyId")
-            PropertyDetailsScreen(propertyId)
+            PropertyDetailsScreen(propertyId, modifier = modifier)
         }
     }
 }

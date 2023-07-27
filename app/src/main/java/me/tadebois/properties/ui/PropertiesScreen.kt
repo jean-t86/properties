@@ -56,6 +56,7 @@ import me.tadebois.properties.ui.theme.PropertiesTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertiesScreen(
+    modifier: Modifier = Modifier,
     propertyViewModel: PropertyViewModel = viewModel(),
     onPropertyTapped: (property: Property) -> Unit
 ) {
@@ -79,7 +80,7 @@ fun PropertiesScreen(
         }
     ) { innerPadding ->
         Surface(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding),
             color = MaterialTheme.colorScheme.background
