@@ -11,22 +11,19 @@ import me.tadebois.properties.api.Property
 import me.tadebois.properties.api.PropertyImage
 
 object Helpers {
-    fun getStreetAddress(property: Property): String? =
-        property.location.address.split(",").getOrNull(0)?.trim()
+    val Property.streetAddress: String?
+        get() = location.address.split(",").getOrNull(0)?.trim()
 
-    fun getSuburb(property: Property): String? =
-        property.location.address.split(",").getOrNull(1)?.trim()
+    val Property.suburb: String?
+        get() = location.address.split(",").getOrNull(1)?.trim()
 
-    fun formatPropertyType(property: Property): String =
-        property.propertyType.lowercase().replaceFirstChar { it.titlecase() }
+    val Property.type: String
+        get() = propertyType.lowercase().replaceFirstChar { it.titlecase() }
 
-    fun formatAgentName(property: Property): String {
-        val firstName = property.agent.firstName
-        val lastName = property.agent.lastName
-        return "$firstName $lastName"
-    }
+    val Property.agentName: String
+        get() = "${agent.firstName} ${agent.lastName}"
 
-    fun getProperty(): Property = Property(
+    fun getMockProperty(): Property = Property(
         id = "1",
         auctionDate = "2020-10-10T23:00:00+10:00",
         availableFrom = "2020-10-10T23:00:00+10:00",

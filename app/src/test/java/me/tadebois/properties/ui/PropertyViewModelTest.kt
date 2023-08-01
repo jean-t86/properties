@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.runTest
 import me.tadebois.properties.MainDispatcherRule
 import me.tadebois.properties.api.Property
 import me.tadebois.properties.model.PropertyRepository
-import me.tadebois.properties.ui.Helpers.getProperty
+import me.tadebois.properties.ui.Helpers.getMockProperty
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -43,7 +43,7 @@ class PropertyViewModelTest {
 
     @Test
     fun loadProperties_success() = runTest {
-        val expected = listOf(getProperty())
+        val expected = listOf(getMockProperty())
         `when`(propertyRepository.getProperties()).thenReturn(flowOf(expected))
 
         propertyViewModel.loadProperties()

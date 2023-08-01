@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import me.tadebois.properties.api.Property
 import me.tadebois.properties.api.PropertyApi
-import me.tadebois.properties.ui.Helpers.getProperty
+import me.tadebois.properties.ui.Helpers.getMockProperty
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -30,7 +30,7 @@ class PropertyRepositoryTest {
 
     @Test
     fun getProperties_success() = runTest {
-        val expected = listOf(getProperty())
+        val expected = listOf(getMockProperty())
         `when`(propertyApi.getProperties()).thenReturn(flowOf(expected))
 
         val actualFlow = propertyRepository.getProperties()

@@ -42,11 +42,11 @@ import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 import me.tadebois.properties.R
 import me.tadebois.properties.api.Property
-import me.tadebois.properties.ui.Helpers.formatAgentName
-import me.tadebois.properties.ui.Helpers.formatPropertyType
-import me.tadebois.properties.ui.Helpers.getProperty
-import me.tadebois.properties.ui.Helpers.getStreetAddress
-import me.tadebois.properties.ui.Helpers.getSuburb
+import me.tadebois.properties.ui.Helpers.agentName
+import me.tadebois.properties.ui.Helpers.getMockProperty
+import me.tadebois.properties.ui.Helpers.streetAddress
+import me.tadebois.properties.ui.Helpers.suburb
+import me.tadebois.properties.ui.Helpers.type
 import me.tadebois.properties.ui.theme.PropertiesTheme
 
 @Composable
@@ -166,11 +166,11 @@ private fun PropertyAddress(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = formatPropertyType(property),
+        text = property.type,
         style = MaterialTheme.typography.titleLarge
     )
-    Text(text = getStreetAddress(property) ?: "", modifier = modifier.alpha(0.3f))
-    Text(text = getSuburb(property) ?: "", modifier = modifier.alpha(0.3f))
+    Text(text = property.streetAddress ?: "", modifier = modifier.alpha(0.3f))
+    Text(text = property.suburb ?: "", modifier = modifier.alpha(0.3f))
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -205,7 +205,7 @@ private fun PropertyAgent(
     }
     Spacer(modifier = modifier.width(8.dp))
     Text(
-        text = formatAgentName(property),
+        text = property.agentName,
         style = MaterialTheme.typography.bodySmall
     )
 }
@@ -215,7 +215,7 @@ private fun PropertyAgent(
 fun PropertyItemPreview() {
     PropertiesTheme {
         PropertyItem(
-            getProperty(),
+            getMockProperty(),
             {}
         )
     }
