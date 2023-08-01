@@ -60,7 +60,7 @@ fun PropertyImagePager(
         )
 
         HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             state = state
         ) { page ->
             val imageBitmap by imageBitmaps[page]
@@ -86,7 +86,7 @@ fun PropertyImagePager(
                     Image(
                         bitmap = it,
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = modifier.fillMaxSize(),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -108,8 +108,8 @@ fun PropertyImagePager(
                 } else {
                     MaterialTheme.colorScheme.secondary
                 }
-                Spacer(modifier = Modifier.size(8.dp))
-                IndicatorCircle(color = color)
+                Spacer(modifier = modifier.size(8.dp))
+                IndicatorCircle(color = color, modifier)
             }
         }
     }
@@ -141,10 +141,11 @@ private fun loadAndCachePropertyImages(
 @Composable
 fun IndicatorCircle(
     color: Color,
+    modifier: Modifier = Modifier,
     diameter: Dp = 10.dp
 ) {
     Surface(
-        modifier = Modifier.size(diameter),
+        modifier = modifier.size(diameter),
         shape = CircleShape,
         color = color
     ) {}

@@ -28,38 +28,50 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PropertiesTheme {
-                App(propertyViewModel)
+                App(Modifier, propertyViewModel)
             }
         }
     }
 }
 
 @Composable
-fun App(propertyViewModel: PropertyViewModel = viewModel()) {
-    val modifier = Modifier
+fun App(
+    modifier: Modifier = Modifier,
+    propertyViewModel: PropertyViewModel = viewModel()
+) {
     val navController = rememberNavController()
 
-    NavHost(navController, startDestination = "splashScreen") {
-        composable(route = "splashScreen") {
+    NavHost(navController, startDestination = Route.SPLASH_SCREEN.name) {
+        composable(route = Route.SPLASH_SCREEN.name) {
             SplashScreen(modifier = modifier, propertyViewModel) {
-                navController.navigate("propertiesScreen") {
-                    popUpTo("splashScreen") { inclusive = true }
+                navController.navigate(Route.PROPERTIES_SCREEN.name) {
+                    popUpTo(Route.SPLASH_SCREEN.name) { inclusive = true }
                 }
             }
         }
-        composable(route = "propertiesScreen") {
+        composable(route = Route.PROPERTIES_SCREEN.name) {
             PropertiesScreen(modifier = modifier, propertyViewModel) { property ->
-                navController.navigate("propertyDetailsScreen/${property.id}")
+                navController.navigate("${Route.PROPERTY_DETAILS_SCREEN.name}/${property.id}")
             }
         }
         composable(
-            route = "propertyDetailsScreen/{propertyId}",
+            route = "${Route.PROPERTY_DETAILS_SCREEN.name}/{${NavArgument.PROPERTY_ID.name}}",
             arguments = listOf(
-                navArgument("propertyId") { type = NavType.StringType }
+                navArgument(NavArgument.PROPERTY_ID.name) { type = NavType.StringType }
             )
         ) { backStackEntry ->
-            val propertyId = backStackEntry.arguments?.getString("propertyId")
+            val propertyId = backStackEntry.arguments?.getString(NavArgument.PROPERTY_ID.name)
             PropertyDetailsScreen(propertyId, modifier = modifier)
         }
     }
+}
+
+enum class Route(name: String) {
+    SPLASH_SCREEN("splashScreen"),
+    PROPERTIES_SCREEN("propertiesScreen"),
+    PROPERTY_DETAILS_SCREEN("propertyDetailsScreen")
+}
+
+enum class NavArgument(name: String) {
+    PROPERTY_ID("propertyId")
 }

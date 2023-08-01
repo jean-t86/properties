@@ -87,9 +87,9 @@ fun SplashScreen(
                     text = error!!,
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(32.dp)
+                    modifier = modifier.padding(32.dp)
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = modifier.height(16.dp))
 
                 val hapticFeedback = LocalHapticFeedback.current
                 Button(
@@ -97,7 +97,7 @@ fun SplashScreen(
                         hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                         propertyViewModel.retryLoadProperties()
                     },
-                    modifier = Modifier.width(140.dp)
+                    modifier = modifier.width(140.dp)
                 ) {
                     Text(text = stringResource(R.string.retry))
                 }

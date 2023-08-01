@@ -50,7 +50,7 @@ class PropertyApiServiceTest {
 
         assertNotNull(properties)
         assertEquals(3, properties?.count())
-        assertEquals(Helpers.getProperty(), properties?.getOrNull(0))
+        assertEquals(Helpers.getMockProperty(), properties?.getOrNull(0))
 
         val recordedRequest = mockWebServer.takeRequest()
         assertEquals("/properties", recordedRequest.path)

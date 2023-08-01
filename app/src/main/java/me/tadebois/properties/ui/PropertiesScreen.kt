@@ -17,13 +17,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,48 +42,25 @@ import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 import me.tadebois.properties.R
 import me.tadebois.properties.api.Property
-import me.tadebois.properties.ui.Helpers.formatAgentName
-import me.tadebois.properties.ui.Helpers.formatPropertyType
-import me.tadebois.properties.ui.Helpers.getProperty
-import me.tadebois.properties.ui.Helpers.getStreetAddress
-import me.tadebois.properties.ui.Helpers.getSuburb
+import me.tadebois.properties.ui.Helpers.agentName
+import me.tadebois.properties.ui.Helpers.getMockProperty
+import me.tadebois.properties.ui.Helpers.streetAddress
+import me.tadebois.properties.ui.Helpers.suburb
+import me.tadebois.properties.ui.Helpers.type
 import me.tadebois.properties.ui.theme.PropertiesTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertiesScreen(
     modifier: Modifier = Modifier,
     propertyViewModel: PropertyViewModel = viewModel(),
     onPropertyTapped: (property: Property) -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.properties_screen),
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            )
-        }
-    ) { innerPadding ->
-        Surface(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            val propertiesState by propertyViewModel.properties.collectAsState(emptyList())
-            PropertyList(properties = propertiesState, onPropertyTapped)
-        }
+    ScreenHeader(
+        title = stringResource(id = R.string.properties_screen),
+        modifier = modifier
+    ) {
+        val propertiesState by propertyViewModel.properties.collectAsState(emptyList())
+        PropertyList(properties = propertiesState, onPropertyTapped)
     }
 }
 
@@ -193,11 +166,11 @@ private fun PropertyAddress(
     modifier: Modifier = Modifier
 ) {
     Text(
-        text = formatPropertyType(property),
+        text = property.type,
         style = MaterialTheme.typography.titleLarge
     )
-    Text(text = getStreetAddress(property) ?: "", modifier = modifier.alpha(0.3f))
-    Text(text = getSuburb(property) ?: "", modifier = modifier.alpha(0.3f))
+    Text(text = property.streetAddress ?: "", modifier = modifier.alpha(0.3f))
+    Text(text = property.suburb ?: "", modifier = modifier.alpha(0.3f))
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -232,7 +205,7 @@ private fun PropertyAgent(
     }
     Spacer(modifier = modifier.width(8.dp))
     Text(
-        text = formatAgentName(property),
+        text = property.agentName,
         style = MaterialTheme.typography.bodySmall
     )
 }
@@ -242,7 +215,7 @@ private fun PropertyAgent(
 fun PropertyItemPreview() {
     PropertiesTheme {
         PropertyItem(
-            getProperty(),
+            getMockProperty(),
             {}
         )
     }
